@@ -168,4 +168,4 @@ T-GMA is a proof-of-concept for exactly this class of system-level memory manage
 
 ## Technologies
 
-`C++11` · `CUDA Driver API (VMM)` · `NVML` · `cuMemMap` · `cuMemCreate` · `cuMemcpyDtoD` · `std::thread` · `std::mutex` · `std::atomic` · `Python` · `matplotlib` · `pandas`
+`C++` · `CUDA Driver API (VMM)` · `NVML` · `cuMemMap` · `cuMemCreate` · `cuMemcpyDtoD` · `std::thread` · `std::mutex` · `std::atomic` · `Python` · `matplotlib` · `pandas`
