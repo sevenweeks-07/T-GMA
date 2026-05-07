@@ -33,7 +33,7 @@
 - **Recovery**: Watchdog detects thermal threshold and triggers active memory consolidation
 - **Result**: Fragmentation drops to **zero**; all free space becomes contiguous
 
-*Fragmentation Score Formula:* $S = 1 - \left(\frac{\text{largest\_contiguous\_free}}{\text{total\_free}}\right)$
+*Fragmentation Score Formula:* $S = 1 - \left(\frac{L_{\text{max}}}{F_{\text{total}}}\right)$ where $L_{\text{max}}$ is the largest contiguous free block and $F_{\text{total}}$ is total free memory
 
 ---
 
