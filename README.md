@@ -11,7 +11,7 @@
 
 ---
 
-## 🎯 Impact at a Glance
+## Impact at a Glance
 
 | Metric | Value |
 |--------|-------|
@@ -24,7 +24,7 @@
 
 ---
 
-## 📊 Live Memory Compaction Visualization
+## Live Memory Compaction Visualization
 
 ![T-GMA Memory Compaction Event](fragmentation_graph.png)
 
@@ -37,7 +37,7 @@
 
 ---
 
-## ⚙️ The Problem
+## The Problem
 
 Standard GPU memory APIs like `cudaMalloc` abstract away physical VRAM placement. Under sustained ML workloads, this creates cascading failures:
 
@@ -53,16 +53,16 @@ Standard GPU memory APIs like `cudaMalloc` abstract away physical VRAM placement
 ```
 
 **Silent Killers:**
-- 🔥 **Thermal Hotspots** — uncontrolled physical data layout causes uneven heat distribution
-- 💥 **Thermal Throttling** — GPU reduces clock speed to survive, degrading training throughput by 20-40%
-- 🧩 **External Fragmentation** — free memory exists in non-contiguous chunks, preventing large allocations
-- 📉 **Invisible Degradation** — driver reports "enough free VRAM" while the system cannot service critical allocations
+- **Thermal Hotspots** — uncontrolled physical data layout causes uneven heat distribution
+- **Thermal Throttling** — GPU reduces clock speed to survive, degrading training throughput by 20-40%
+- **External Fragmentation** — free memory exists in non-contiguous chunks, preventing large allocations
+- **Invisible Degradation** — driver reports "enough free VRAM" while the system cannot service critical allocations
 
 These issues compound silently over hours-long training runs, cutting effective VRAM utilization in half.
 
 ---
 
-## 🚀 The Solution: Virtual Memory Management (VMM)
+## The Solution: Virtual Memory Management (VMM)
 
 T-GMA takes control at the **hardware level** using **Virtual Memory Management** from the CUDA Driver API — the same low-level interface used by production frameworks like PyTorch's `ExpandingAllocator` and NVIDIA's `cuMemoryManager`.
 
@@ -110,7 +110,7 @@ float* virtual_ptr = allocator.allocate(256MB);  // Decoupled
 
 ---
 
-## 🏆 Key Technical Achievements
+## Key Technical Achievements
 
 ### Production-Grade Engineering
 
@@ -133,7 +133,7 @@ float* virtual_ptr = allocator.allocate(256MB);  // Decoupled
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### Thread Model
 
@@ -190,7 +190,7 @@ Frag Score: 0.65           Copy+Remap              Frag Score: 0.0
 
 ---
 
-## 📋 Project Structure
+## Project Structure
 
 ```
 T-GMA/
@@ -205,7 +205,7 @@ T-GMA/
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -239,20 +239,20 @@ python3 plot_frag.py
 ### What Happens
 
 The engine will:
-1. ✓ Boot VMM allocator and reserve 1 GB virtual address space
-2. ✓ Spawn NVML watchdog thread at 1 Hz
-3. ✓ Allocate 5 tensors (2 MB each) with sentinel values
-4. ✓ Deliberately free alternating pages to induce fragmentation
-5. ✓ Trigger active compaction when thermal threshold is breached
-6. ✓ Verify sentinel values survive physical migration (**data integrity proof**)
-7. ✓ Log telemetry to `fragmentation_log.csv`
-8. ✓ Visualize compaction success in `fragmentation_graph.png`
+1. Boot VMM allocator and reserve 1 GB virtual address space
+2. Spawn NVML watchdog thread at 1 Hz
+3. Allocate 5 tensors (2 MB each) with sentinel values
+4. Deliberately free alternating pages to induce fragmentation
+5. Trigger active compaction when thermal threshold is breached
+6. Verify sentinel values survive physical migration (**data integrity proof**)
+7. Log telemetry to `fragmentation_log.csv`
+8. Visualize compaction success in `fragmentation_graph.png`
 
 ---
 
 ---
 
-## 🔧 Compaction Algorithm (In Depth)
+## Compaction Algorithm (In Depth)
 
 The compaction engine guarantees **zero data corruption** while relocating memory. Here's the algorithm:
 
@@ -307,7 +307,7 @@ assert(*ptr == 1337);  // Sentinel survived ✓
 
 ---
 
-## 🎯 Production Use Cases
+## Production Use Cases
 
 ### Problem Domain: LLM Inference @ Scale
 
@@ -354,7 +354,7 @@ T-GMA Solution:
 
 ---
 
-## 🛠️ Technology Stack & References
+## Technology Stack & References
 
 ### Core Technologies
 
@@ -377,7 +377,7 @@ T-GMA Solution:
 
 ---
 
-## 📈 Performance Characteristics
+## Performance Characteristics
 
 ### Compaction Latency
 
@@ -402,32 +402,21 @@ T-GMA Solution:
 
 ---
 
-## 🎓 Educational Value
+## Educational Value
 
 This project demonstrates:
 
-✅ **CUDA Driver API mastery** — Virtual memory management at the lowest level  
-✅ **Systems programming** — Thread safety, lock-free algorithms, memory invariants  
-✅ **Hardware understanding** — GPU thermal management, silicon layout, memory hierarchy  
-✅ **Telemetry & observability** — Real-time monitoring, CSV logging, visualization  
-✅ **Low-latency systems** — Sub-millisecond operations, PCIe-free data movement  
+- **CUDA Driver API mastery** — Virtual memory management at the lowest level  
+- **Systems programming** — Thread safety, lock-free algorithms, memory invariants  
+- **Hardware understanding** — GPU thermal management, silicon layout, memory hierarchy  
+- **Telemetry & observability** — Real-time monitoring, CSV logging, visualization  
+- **Low-latency systems** — Sub-millisecond operations, PCIe-free data movement  
 
 ---
 
-## 📜 License & Attribution
+## License & Attribution
 
 `MIT License` — See [LICENSE](LICENSE) file
 
 **Author Notes:** This project is a standalone proof-of-concept demonstrating VMM-based GPU memory management principles. It is **not affiliated with NVIDIA** but leverages official CUDA Driver and NVML APIs.
 
----
-
-## 🤝 Contributing & Contact
-
-This is a research/portfolio project. For questions, suggestions, or discussions about GPU memory management, thermal control, or CUDA Driver API internals, feel free to open an issue or contact the author.
-
----
-
-## Technologies
-
-`C++11` · `CUDA Driver API (Virtual Memory Management)` · `NVML (Thermal Telemetry)` · `cuMemMap` · `cuMemCreate` · `cuMemAddressReserve` · `cuMemcpyDtoD` · `std::thread` · `std::mutex` · `std::atomic<bool>` · `Python` · `matplotlib` · `pandas` · `NVIDIA GPU` · `Linux`
